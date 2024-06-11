@@ -3,22 +3,18 @@ pipeline {
     tools {
         maven 'mymaven'
     }
-    stages {
-        stage('Build') {
+   stage('Build') {
             steps {
                 sh '''
-                    echo "*************** Starting CI/CD Pipeline Tasks ***************"
-                    echo ""
-                    echo "....... Build Phase Started :: Compiling Source Code :: ........"
-                    cd java_web_code
-                    mvn install
-                    echo ""
-                    echo "....... Build Phase Completed :: Listing Artifacts :: ........"
-                    ls -l target/
-                    echo ""
-                    echo "....... Test Phase Started :: Testing via Automated Scripts :: ........"
-                    cd ../integration-testing/
-                    mvn clean verify -P integration-test
+                    echo "***************Starting CI CD Pipeline Tasks ***************"
+	echo ""
+	echo "....... Build Phase Started :: Copiling Source Code :: ........"
+	cd java_web_code
+	mvn install
+	echo ""
+	echo "....... Test Phase Started :: Testing via Automated Scripts :: ........"
+	cd ../integration-testing/
+	mvn clean verify -P integration-test
                 '''
             }
         }
