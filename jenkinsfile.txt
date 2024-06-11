@@ -12,7 +12,8 @@ pipeline {
                     cd java_web_code
                     mvn install
                     echo "Test Phase Started"
-                    cd ../integration-testing/
+                    cd ..
+                    cd integration-testing/
                     mvn clean verify -P integration-test
                 '''
             }
