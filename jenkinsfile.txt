@@ -13,6 +13,9 @@ pipeline {
                     cd java_web_code
                     mvn install
                     echo ""
+                    echo "....... Build Phase Completed :: Listing Artifacts :: ........"
+                    ls -l target/
+                    echo ""
                     echo "....... Test Phase Started :: Testing via Automated Scripts :: ........"
                     cd ../integration-testing/
                     mvn clean verify -P integration-test
@@ -25,6 +28,8 @@ pipeline {
                     echo ""
                     echo "....... Integration Phase Started :: Copying Artifacts :: ........"
                     cd ..
+                    echo "Listing contents of java_web_code/target/ directory:"
+                    ls -l java_web_code/target/
                     cp java_web_code/target/wildfly-spring-boot-sample-1.0.0.war docker/
                     echo ""
                     echo "....... Provisioning Phase Started :: Building Docker Container :: ........"
