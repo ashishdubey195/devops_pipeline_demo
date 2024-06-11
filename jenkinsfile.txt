@@ -7,48 +7,51 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                    echo "Starting CI CD Pipeline Tasks"
-	echo ""
-	echo "Build Phase Started :: Copiling Source Code"
-	cd java_web_code
-	mvn install
-	echo "Test Phase Started :: Testing via Automated Scripts"
-	cd ../integration-testing/
-	mvn clean verify -P integration-test
+                    echo "*************** Starting CI CD Pipeline Tasks ***************"
+                    echo ""
+                    echo "....... Build Phase Started :: Compiling Source Code :: ........"
+                    cd java_web_code
+                    mvn install
+                    echo ""
+                    echo "....... Test Phase Started :: Testing via Automated Scripts :: ........"
+                    cd ../integration-testing/
+                    mvn clean verify -P integration-test
                 '''
             }
         }
-       stage('Test') {
+        stage('Test') {
             steps {
                 sh '''
-	echo ""
-	echo "Integration Phase Started :: Copying Artifacts"
-	cd docker/
-        cp /java_web_code/target/wildfly-spring-boot-sample-1.0.0.war .
-	echo ""
-	echo "Provisioning Phase Started :: Building Docker Container ::"
-	docker build -t devops_pipeline_demo .
+                    echo ""
+                    echo "Integration Phase Started :: Copying Artifacts"
+                    cd docker/
+                    cp /java_web_code/target/wildfly-spring-boot-sample-1.0.0.war .
+                    echo ""
+                    echo "Provisioning Phase Started :: Building Docker Container ::"
+                    docker build -t devops_pipeline_demo .
                 '''
             }
         }
-	stage('deploy') {
-	     steps {
-               	        sh '''
-	             	CONTAINER=devops_pipeline_demo
-		OLD="$(docker ps -aq --filter=name="$CONTAINER")"
-		if [ -n "$OLD" ]; then
-		  docker stop $OLD && docker rm $OLD
-		fi
+        stage('deploy') {
+            steps {
+                sh '''
+                    CONTAINER=devops_pipeline_demo
+                    OLD="$(docker ps -aq --filter=name="$CONTAINER")"
+                    if [ -n "$OLD" ]; then
+                        docker stop $OLD && docker rm $OLD
+                    fi
 
-		echo ""
-		echo "Deployment Phase Started :: Building Docker Container ::"
-		docker run -d -p 8180:8080 --name devops_pipeline_demo devops_pipeline_demo
+                    echo ""
+                    echo "..... Deployment Phase Started :: Running Docker Container :: ......"
+                    docker run -d -p 8180:8080 --name devops_pipeline_demo devops_pipeline_demo
 
-		echo "--------------------------------------------------------"
-		echo "View App deployed here: http://server-ip:8180/sample.txt"
-		echo "--------------------------------------------------------"
-	        '''
-            	   }
-                 }
-           }
+                    echo "--------------------------------------------------------"
+                    echo "View App deployed here: http://server-ip:8180/sample.txt"
+                    echo "--------------------------------------------------------"
+                '''
+            }
+        }
     }
+}
+
+	
