@@ -7,7 +7,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                    echo "Starting CI CD Pipeline Task
+                    echo "Starting CI CD Pipeline Task"
                     echo "Compiling Source Code"
                     cd java_web_code
                     mvn install
