@@ -7,13 +7,11 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                    echo "Starting CI CD Pipeline Tasks"
-                    echo ""
-                    echo " Build Phase Started :: Compiling Source"
+                    echo "Starting CI CD Pipeline Task
+                    echo "Compiling Source Code"
                     cd java_web_code
                     mvn install
-                    echo ""
-                    echo "Test Phase Started :: Testing via Automated Scripts ::"
+                    echo "Test Phase Started"
                     cd ../integration-testing/
                     mvn clean verify -P integration-test
                 '''
@@ -22,11 +20,9 @@ pipeline {
         stage('Test') {
             steps {
                 sh '''
-                    echo ""
-                    echo "Integration Phase Started :: Copying Artifacts ::"
+                    echo "Copying Artifacts"
                     cp java_web_code/target/wildfly-spring-boot-sample-1.0.0.war docker/
-                    echo ""
-                    echo "Provisioning Phase Started :: Building Docker Container ::"
+                    echo "Building Docker Container"
                     cd docker/
                     docker build -t devops_pipeline_demo .
                 '''
@@ -40,9 +36,7 @@ pipeline {
                     if [ -n "$OLD" ]; then
                         docker stop $OLD && docker rm $OLD
                     fi
-
-                    echo ""
-                    echo "Deployment Phase Started :: Running Docker Container ::"
+                    echo "Running Docker Container ::"
                     docker run -d -p 8180:8080 --name devops_pipeline_demo devops_pipeline_demo
                     echo "View App deployed here: http://server-ip:8180/sample.txt"
                 '''
