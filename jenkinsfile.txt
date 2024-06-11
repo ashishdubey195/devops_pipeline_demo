@@ -3,35 +3,35 @@ pipeline {
     tools {
         maven 'mymaven'
     }
-   stage('Build') {
+    stages {
+        stage('Build') {
             steps {
                 sh '''
                     echo "***************Starting CI CD Pipeline Tasks ***************"
-	echo ""
-	echo "....... Build Phase Started :: Copiling Source Code :: ........"
-	cd java_web_code
-	mvn install
-	echo ""
-	echo "....... Test Phase Started :: Testing via Automated Scripts :: ........"
-	cd ../integration-testing/
-	mvn clean verify -P integration-test
+                    echo ""
+                    echo "....... Build Phase Started :: Compiling Source Code :: ........"
+                    cd java_web_code
+                    mvn install
+                    echo ""
+                    echo "....... Test Phase Started :: Testing via Automated Scripts :: ........"
+                    cd ../integration-testing/
+                    mvn clean verify -P integration-test
                 '''
             }
         }
         stage('Test') {
-    steps {
-        sh '''
-            echo ""
-            echo "....... Integration Phase Started :: Copying Artifacts :: ........"
-            cp java_web_code/target/wildfly-spring-boot-sample-1.0.0.war docker/
-            echo ""
-            echo "....... Provisioning Phase Started :: Building Docker Container :: ........"
-            cd docker/
-            docker build -t devops_pipeline_demo .
-        '''
-    }
-}
-
+            steps {
+                sh '''
+                    echo ""
+                    echo "....... Integration Phase Started :: Copying Artifacts :: ........"
+                    cp java_web_code/target/wildfly-spring-boot-sample-1.0.0.war docker/
+                    echo ""
+                    echo "....... Provisioning Phase Started :: Building Docker Container :: ........"
+                    cd docker/
+                    docker build -t devops_pipeline_demo .
+                '''
+            }
+        }
         stage('Deploy') {
             steps {
                 sh '''
