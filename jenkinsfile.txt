@@ -19,12 +19,13 @@ pipeline {
                 '''
             }
         }
-        stage('Test') {
+       stage('Test') {
             steps {
                 sh '''
                     echo ""
                     echo "Integration Phase Started :: Copying Artifacts"
                     cd ..
+                    ls -l java_web_code/target/
                     cp java_web_code/target/wildfly-spring-boot-sample-1.0.0.war docker/
                     echo ""
                     echo "Provisioning Phase Started :: Building Docker Container ::"
