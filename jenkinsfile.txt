@@ -25,7 +25,7 @@ pipeline {
                     echo ""
                     echo "Integration Phase Started :: Copying Artifacts"
                     cd docker/
-                    cp /root/java_web_code/target/wildfly-spring-boot-sample-1.0.0.war .
+                    cp /java_web_code/target/wildfly-spring-boot-sample-1.0.0.war .
                     echo ""
                     echo "Provisioning Phase Started :: Building Docker Container ::"
                     docker build -t devops_pipeline_demo .
