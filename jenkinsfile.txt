@@ -15,20 +15,24 @@ pipeline {
                     echo ""
                     echo "Listing contents of target directory after build:"
                     ls -l target
+                    echo ""
+                    echo "....... Test Phase Started :: Testing via Automated Scripts :: ........"
+                    cd ../integration-testing/
+                    mvn clean verify -P integration-test
                 '''
             }
         }
-        stage('Test') {
+       stage('Test') {
             steps {
                 sh '''
                     echo ""
                     echo "Integration Phase Started :: Copying Artifacts"
-                    cd java_web_code
-                    ls -l target
-                    cp target/wildfly-spring-boot-sample-1.0.0.war ../docker/
+                    cd ..
+                    ls -l java_web_code/target/
+                    cp java_web_code/target/wildfly-spring-boot-sample-1.0.0.war docker/
                     echo ""
                     echo "Provisioning Phase Started :: Building Docker Container ::"
-                    cd ../docker
+                    cd docker/
                     docker build -t devops_pipeline_demo .
                 '''
             }
